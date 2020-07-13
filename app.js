@@ -68,4 +68,4 @@ app.use('/tickets', require('./routes/tickets'));
 
 
 
-app.listen(9000, console.log(`Server running in mode ${process.env.NODE_ENV} at port ${port}`))
+app.listen(process.env.NODE_ENV, console.log(`Server running in mode ${process.env.NODE_ENV} at port ${port}`))
