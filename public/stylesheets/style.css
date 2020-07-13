@@ -1,5 +1,6 @@
 .container {
    width: 80vw;
+   margin-top: 20px;
 }
 
 .app-content {
@@ -35,6 +36,10 @@ button {
    }
 }
 
+.newTicket {
+   margin-top: 100px;
+}
+
 .alert-success:hover {
    background: #00e676 !important;
 }
@@ -47,4 +52,13 @@ button {
 
 .alert-success {
    background: #69f0ae !important;
+}
+
+#btnSaveTicket {
+   animation-name: none !important;
+}
+
+#ticketsList,
+#cardEditTitle {
+   margin-top: 100px;
 }
