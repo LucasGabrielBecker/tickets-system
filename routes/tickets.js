@@ -52,6 +52,14 @@ router.post('/saveTicket', async(req, res) => {
 });
 
 
+//@desc   Delete a ticket based on his ID
+//@route  GET /delete/id
+router.get('/delete/:id', async(req, res) => {
+    const ticketId = req.params.id;
+    const ticket = await Ticket.findOneAndRemove({ _id: ticketId })
+    req.flash('succes', 'Ticket deleted')
+    res.redirect('/tickets/all')
+});
 
 
 module.exports = router;
