@@ -13,6 +13,7 @@ const bcrypt = require('bcrypt')
 const toastr = require('express-toastr')
 var port = 9000;
 var app = express();
+const userController = require('./controllers/userController')
 dotenv.config({ path: "./config/config.env" })
 
 //connection to DB
@@ -62,7 +63,7 @@ app.use((req, res, next) => {
 
 
 //setting routers
-app.use('/', require('./routes/index'));
+app.use('/auth', require('./routes/auth'));
 app.use('/users', require('./routes/users'));
 app.use('/tickets', require('./routes/tickets'));
 

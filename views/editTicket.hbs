@@ -1,12 +1,24 @@
 <div class="card" id="cardEditTitle">
   <div class="card-header d-flex justify-content-between">
     <h3>{{ticket.title}}</h3>
-    <p><i class="fa fa-user mr-2" aria-hidden="true"></i>{{ticket.createdBy}}</p>
+    {{#if ticket.assignedTo}}
+      <p>Assigned to: {{ticket.assignedTo}}</p>
+      {{else}}
+        <div class="form-group col-md-4">
+        <label for="inputState">Sign to</label>
+          <select id="inputState" class="form-control">
+            <option selected>Choose...</option>
+            {{#each technicians}}
+              <option>{{this.username}}</option>
+            {{/each}}
+          </select>
+        </div>
+    {{/if}}
   </div>
   <div class="card-body">
-        
     <p class="card-text">{{ticket.description}}</p>
     <a href="/tickets/all" class="btn btn-primary"><small>Go back</small></a>
+    <a href="/tickets/edit/{{ticketId}}/addSigned/:" class="btn btn-success"><small>Save</small></a>
     <div class="float-right">
       <a href="/tickets/delete/{{ticket._id}}"><i class="fa fa-trash" aria-hidden="true"></i></a>
     </div>

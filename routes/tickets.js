@@ -3,12 +3,13 @@ const router = express.Router();
 const Ticket = require('../models/Ticket');
 const User = require('../models/User');
 
+
 // for all the endpoints in this file
 // the user must be logged in
 
 
 //@desc   First tickets
-//@route  GET /tickets
+//@route  GET /tickets/all
 router.get('/all', async(req, res) => {
     const tickets = await Ticket.find({}).lean();
     res.render('allTickets', {
@@ -22,10 +23,12 @@ router.get('/all', async(req, res) => {
 router.get('/edit/:id', async(req, res) => {
     const reqId = req.params.id;
     const ticket = await Ticket.findOne({ _id: reqId }).lean();
-    console.log(ticket);
+    res.locals.ticketId = ticket._id;
+    const tecnicos = User.find({}).lean();
     res.render('editTicket', {
         layout: 'main',
-        ticket: ticket
+        ticket: ticket,
+        technicians: tecnicos
     })
 });
 

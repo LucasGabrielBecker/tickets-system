@@ -7,9 +7,16 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 
+//@desc redirect to login page
+//@route /auth/
+router.get('/', (req, res) => {
+    res.redirect("/login")
+})
+
 //@desc   Login page
 //@route  GET /login
 router.get('/login', (req, res, next) => {
+    console.log('we are at the router auth/login')
     res.render('login', {
         layout: 'login',
     })
@@ -43,12 +50,7 @@ router.post('/login', async(req, res, next) => {
         req.flash('error', "entering in catch")
         res.redirect('/login', )
     }
-
-
-
 });
-
-
 
 //@desc   Register page
 //@route  GET  /register
@@ -84,14 +86,6 @@ router.post('/register', (req, res, next) => {
         req.flash('error', 'The passwords does not match')
         res.redirect('/register')
     }
-});
-
-
-
-//@desc   Tickets page
-//@route  GET /tickets
-router.get('/tickets', function(req, res, next) {
-    res.render('tickets');
 });
 
 
