@@ -11,11 +11,7 @@ const User = require('../models/User');
 //@route  GET /tickets
 router.get('/all', async(req, res) => {
    const tickets = await Ticket.find({}).lean();
-   console.log(tickets);
-   res.render('allTickets', {
-      layout: 'main',
-      tickets: tickets
-   })
+   res.json(tickets).status(200)
 });
 
 //@desc   View single ticket
