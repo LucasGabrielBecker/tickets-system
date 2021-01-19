@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose')
 const Ticket = require('../models/Ticket');
 const User = require('../models/User');
-
-// for all the endpoints in this file
-// the user must be logged in
-
 
 //@desc   First tickets
 //@route  GET /tickets
@@ -14,40 +11,63 @@ router.get('/all', async(req, res) => {
    res.json(tickets).status(200)
 });
 
-//@desc   View single ticket
-//@route  GET /tickets/edit/:id
-router.get('/edit/:id', async(req, res) => {
+//@desc   Edit ticket
+//@route  PUT /tickets/edit/:id
+//@PARAMS   ID
+router.put('/edit/:id', async(req, res) => {
    const reqId = req.params.id;
-   const ticket = await Ticket.findOne({ _id: reqId }).lean();
-   console.log(ticket);
-   res.render('editTicket', {
-      layout: 'main',
-      ticket: ticket
-   })
+   if(!mongoose.Types.ObjectId.isValid(reqId)) {
+      res.json({succes:false, msg:"Provide valid ID"}).status(404)
+   }
+
+   Ticket.findOneAndUpdate(
+      {_id: reqId},
+      {$set:
+         {title:req.body.title, description: req.body.description}},
+         {new:true}) 
+            .then((docs)=>{
+               if(docs) {
+                  res.json(docs).status(201)
+               } else {
+                  res.json({success:false,data:"no such user exist"});
+               }
+               }).catch((err)=>{
+                  console.log(err)
+                  res.json({succes:false, msg:"There are an error"}).status(500)
+               })
+})
+
+//@desc   Create ticket
+//@route  POST /createTicket
+router.post('/create', async(req, res) => {
+   const ticketdata = req.body;
+   
+   const ticket = Ticket(ticketdata)
+   await ticket.save()
+
+   res.json(ticket).status(200)
+
+
 });
 
-//@desc   Create ticket page
-//@route  Get /createTicket
-router.get('/createTicket', async(req, res) => {
-   const users = await User.find({}).lean();
-   res.render('createTicket', {
-      layout: 'main',
-      users: users
-   })
-});
 
-//@desc   Create ticket save method
-//@route  POST /saveTicket
-router.post('/saveTicket', async(req, res) => {
-   const { title, description, createdBy } = req.body;
-   var ticket = await Ticket.create({
-      title: title,
-      description: description,
-      createdBy: createdBy
-   })
-   res.json({ msg: "Ticket created successfully!" })
-});
+//@desc     Get ticket from it ID
+//@route    GET /tickets/id
+//@PARAMS   ID
+router.get('/:id', async (req, res)=>{
+   const id = req.params.id;
+   if(!mongoose.Types.ObjectId.isValid(id)) {
+      res.json({succes:false, msg:"Provide valid ID"}).status(404)
+   }
 
+   const ticket = await Ticket.findById(id)
+   if(!ticket){
+      res.json({msg:"No ticket founded"}).status(404)
+   }
+
+   res.json(ticket).status(200)
+
+})
 
 
 
